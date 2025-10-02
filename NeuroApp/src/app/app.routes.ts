@@ -3,8 +3,12 @@ import { SimpleLayout } from './Shared/layouts/simple-Layout/simple-layout/simpl
 
 export const routes: Routes = [
     {
-    path: '',
-     component: SimpleLayout,
+        path: 'auth',
+        loadChildren: () => import('./Features/Auth/auth.routes').then(m => m.authRoutes)
+    },
+    {
+        path: '',
+        component: SimpleLayout,
         loadChildren: () => import('./Features/Instructor/instructor.routes').then(m => m.routes),
         data: { roles: ['instructor'] }
     }
