@@ -10,7 +10,8 @@ namespace Platform.Core.Interfaces
 {
     public interface IInstructorService
     {
-        Task<(bool Succeeded, string Errors)> RegisterInstructorAsync(RegisterInstructorDto dto);
+        Task<(bool Succeeded, string Errors)> RegisterInstructor2Async(RegisterInstructorIfAccountExistsDto dto);
+        Task<InstructorReadDto> RegisterInstructorAsync(InstructorRegisterDto dto);
         Task<InstructorDto> GetInstructorByIdAsync(int id);
         Task<IEnumerable<InstructorDto>> GetAllInstructorsAsync();
         Task<(bool Succeeded, string Errors)> VerifyInstructorAsync(int id);

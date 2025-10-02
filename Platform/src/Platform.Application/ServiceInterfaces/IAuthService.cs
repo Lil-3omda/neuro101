@@ -8,12 +8,14 @@ using Platform.Core.DTOs;
 using Platform.Application.DTOs;
 
 
-namespace Platform.Core.Interfaces
+namespace Platform.Application.Interfaces
 {
     public interface IAuthService
     {
         Task<(bool Succeeded, string Errors)> RegisterAsync(RegisterStudentDto dto);
         Task<(bool Succeeded, string Token, string Errors)> LoginAsync(LoginDto dto);
+        Task<bool> EmailExistsAsync(string email);
+
 
     }
 }

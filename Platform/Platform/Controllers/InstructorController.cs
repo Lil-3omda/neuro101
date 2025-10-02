@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Platform.Application.DTOs;
 using Platform.Core.DTOs;
 using Platform.Core.Interfaces;
@@ -17,15 +16,29 @@ namespace Platform.Controllers
             _service = service;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterInstructorDto dto)
+        [HttpPost("register-new")]
+        public async Task<IActionResult> RegisterNew([FromBody] InstructorRegisterDto dto)
         {
-            var result = await _service.RegisterInstructorAsync(dto);
+            try
+            {
+                var instructor = await _service.RegisterInstructorAsync(dto);
+                return Ok(instructor);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("register-existing")]
+        public async Task<IActionResult> RegisterExisting([FromBody] RegisterInstructorIfAccountExistsDto dto)
+        {
+            var result = await _service.RegisterInstructor2Async(dto);
             if (!result.Succeeded) return BadRequest(result.Errors);
             return Ok("Instructor registered successfully.");
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var instructor = await _service.GetInstructorByIdAsync(id);
@@ -40,14 +53,12 @@ namespace Platform.Controllers
             return Ok(instructors);
         }
 
-        // 
-        [HttpPut("verify/{id}")]
+        [HttpPut("verify/{id:int}")]
         public async Task<IActionResult> Verify(int id)
         {
             var result = await _service.VerifyInstructorAsync(id);
             if (!result.Succeeded) return BadRequest(result.Errors);
             return Ok("Instructor verified successfully.");
         }
-    
     }
 }

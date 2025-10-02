@@ -3,8 +3,10 @@ using Platform.Application.DTOs;
 using Platform.Core.DTOs;
 using Platform.Core.Interfaces;
 using Platform.Core.Models;
+using Platform.Application.Interfaces;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace Platform.Application.Services
 {
@@ -24,6 +26,11 @@ namespace Platform.Application.Services
             _jwtService = jwtService;
         }
 
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user != null;
+        }
         public async Task<(bool Succeeded, string Errors)> RegisterAsync(RegisterStudentDto dto)
         {
             var user = new AppUser

@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Platform.Infrastructure.Data.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Platform.Application.ServiceInterfaces;
 
 
 namespace Platform.Api.Controllers
@@ -20,17 +21,20 @@ namespace Platform.Api.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IConfiguration _config;
         private readonly CourseDbContext _context;
+        private readonly IOtpService _otpService;
 
         public AuthController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             IConfiguration config,
-            CourseDbContext context)
+            CourseDbContext context,
+            IOtpService otpService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
             _context = context;
+            _otpService = otpService;
         }
 
 
@@ -84,9 +88,6 @@ namespace Platform.Api.Controllers
             return Ok(new { token });
         }
 
-        // =====================
-        // Get Current Student
-        // =====================
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUser()
         {
@@ -114,9 +115,6 @@ namespace Platform.Api.Controllers
             return Ok(dto);
         }
 
-        // =====================
-        // Helper: JWT Generator
-        // =====================
         private string GenerateJwtToken(AppUser user)
         {
             var claims = new[]
@@ -138,6 +136,40 @@ namespace Platform.Api.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        [HttpGet("check-email")]
+        public async Task<IActionResult> CheckEmail([FromQuery] string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return BadRequest("Email is required.");
+
+            var user = await _userManager.FindByEmailAsync(email);
+            var exists = user != null;
+
+            return Ok(new { email, exists });
+        }
+
+        [HttpPost("send-otp")]
+        public async Task<IActionResult> SendOtp([FromQuery] string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound("User not found");
+
+            var otp = await _otpService.GenerateOtpAsync(user.Id, user.Email, $"{user.FirstName} {user.LastName}");
+            return Ok(new { message = "OTP sent to email" });
+        }
+
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOtp([FromQuery] string email, [FromQuery] string code)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound("User not found");
+
+            var isValid = await _otpService.ValidateOtpAsync(user.Id, code);
+            if (!isValid) return BadRequest("Invalid or expired OTP");
+
+            return Ok(new { message = "OTP verified successfully" });
         }
     }
 }

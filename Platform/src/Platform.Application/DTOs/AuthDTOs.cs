@@ -46,13 +46,33 @@ namespace Platform.Application.DTOs
         public string Name { get; set; }
 
     }
-    public class RegisterInstructorDto
+    public class RegisterInstructorIfAccountExistsDto
     {
         public string LinkedIn { get; set; }
         public string Qualifications { get; set; }
-        public string UserId { get; set; } // لو هيجي بعد ما يخلص تسجيل User
+        public string UserId { get; set; } 
     }
+    public class InstructorRegisterDto
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }  
+        public string? Address { get; set; }
+        public string? Gender { get; set; }
 
+        public string LinkedIn { get; set; }
+        public string Qualifications { get; set; }
+    }
+    public class InstructorReadDto
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string LinkedIn { get; set; }
+        public bool IsVerified { get; set; }
+        public string Qualifications { get; set; }
+    }
     public class InstructorDto
     {
         public int Id { get; set; }

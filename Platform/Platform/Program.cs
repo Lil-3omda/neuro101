@@ -11,12 +11,14 @@ using Platform.Core.Interfaces.IRepos;
 using Platform.Core.Models;
 using Platform.Infrastructure.Data.DbContext;
 using Platform.Infrastructure.Repositories;
+
 using Platform.Core.Interfaces.IUnitOfWork;
 using Platform.Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Http.Features;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 using System.Text;
+
 
 namespace Platform
 {
@@ -37,9 +39,13 @@ namespace Platform
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<CourseDbContext>()
                 .AddDefaultTokenProviders();
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOFWork>();
             builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
             builder.Services.AddScoped<IInstructorService, InstructorService>();
+            builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<IOtpService, OtpService>();
+
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IVideoService, VideoService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOFWork>();
@@ -64,6 +70,7 @@ namespace Platform
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<ICourseService, CourseService>();
             
+
 
             builder.Services.AddAuthentication(options =>
             {
