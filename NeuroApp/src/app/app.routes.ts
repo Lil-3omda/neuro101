@@ -15,14 +15,19 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
-        path: '**',
-        redirectTo: 'auth/login'
-    },
-    {
         path: '',
         component: SimpleLayout,
         loadChildren: () => import('./Features/Instructor/instructor.routes').then(m => m.routes),
         // data: { roles: ['instructor'] }
     },
-
+    {
+        path: '',
+        component: SimpleLayout,
+        loadChildren: () => import('./Features/Admin/admin.routes').then(m => m.adminRoutes),
+        // data: { roles: ['admin'] }
+    },
+    {
+        path: '**',
+        redirectTo: 'auth/login'
+    }
 ];
