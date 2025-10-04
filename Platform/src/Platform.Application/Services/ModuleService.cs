@@ -49,42 +49,40 @@ namespace Platform.Application.Services
 
         public async Task<IEnumerable<ModulesDTO>?> GetAllModules()
         {
-            IEnumerable<Platform.Core.Models.Module> modules =  await unitOfWork.moduleRepository.GetAllAsync();
+            IEnumerable<Platform.Core.Models.Module> modules = await unitOfWork.moduleRepository.GetAllAsync();
 
-            if (modules == null)
+            if (modules == null || !modules.Any())
             {
-
                 return null;
             }
 
-            else
+            return modules.Select(module => new ModulesDTO()
             {
-                return modules.Select(module => new ModulesDTO()
+                Id = module.Id,
+                Title = module.Title,
+                ModuleArrangement = module.ModuleArrangement,
+                CourseId = module.CourseId,
+                Course = new EnrolledCoursesDTO()
                 {
-                    Id = module.Id,
-                    Title = module.Title,
-                    ModuleArrangement = module.ModuleArrangement,
-                    CourseId = module.CourseId,
-                    Course = new EnrolledCoursesDTO()
-                    {
-                        Title = module?.Course?.Title ?? "",
-                        Description = module?.Course?.Description ?? "",
-                        Id = module?.Course?.Id ?? 0,
-                        InstructorId = module?.Course?.InstructorId ?? 0,
-                        IsFree = module?.Course?.IsFree ?? false,
-                        Price = module?.Course?.Price ?? 0,
-                        ThumbnailUrl = module?.Course?.ThumbnailUrl ?? ""
-
-
-                    },
-
-                    Videos = module?.Videos ?? []
-
-                });
-
-            }
-           
+                    Title = module?.Course?.Title ?? "",
+                    Description = module?.Course?.Description ?? "",
+                    Id = module?.Course?.Id ?? 0,
+                    InstructorId = module?.Course?.InstructorId ?? 0,
+                    IsFree = module?.Course?.IsFree ?? false,
+                    Price = module?.Course?.Price ?? 0,
+                    ThumbnailUrl = module?.Course?.ThumbnailUrl ?? ""
+                },
+                Videos = module?.Videos?.Select(v => new VideoDto
+                {
+                    Id = v.Id,
+                    Title = v.Title,
+                    FilePath = v.FilePath,
+                    Duration = v.Duration,
+                    VideoArrangement = v.VideoArrangement
+                }).ToList() ?? new List<VideoDto>()
+            });
         }
+
 
         public async Task<ModulesDTO?> GetModulesById(int id)
         {
@@ -117,7 +115,14 @@ namespace Platform.Application.Services
 
                     },
 
-                    Videos = module?.Videos ?? []
+                    Videos = module?.Videos?.Select(v => new VideoDto
+                    {
+                        Id = v.Id,
+                        Title = v.Title,
+                        FilePath = v.FilePath,
+                        Duration = v.Duration,
+                        VideoArrangement = v.VideoArrangement
+                    }).ToList() ?? new List<VideoDto>()
 
                 };
 

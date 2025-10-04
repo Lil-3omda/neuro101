@@ -24,10 +24,16 @@ export class RegisterComponent {
 
   constructor() {
     this.registerForm = this.fb.group({
-      userName: ['', [Validators.required, Validators.minLength(3)]],
+      // New API fields
+      firstName: [''],
+      lastName: [''],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
+      address: [''],
+      gender: [''],
+      // Legacy fields kept temporarily for compatibility with current template
+      userName: ['', [Validators.required, Validators.minLength(3)]],
       role: ['student', [Validators.required]]
     }, {
       validators: this.passwordMatchValidator
@@ -61,6 +67,23 @@ export class RegisterComponent {
     return this.registerForm.get('confirmPassword');
   }
 
+  // New API fields
+  get firstName() {
+    return this.registerForm.get('firstName');
+  }
+
+  get lastName() {
+    return this.registerForm.get('lastName');
+  }
+
+  get address() {
+    return this.registerForm.get('address');
+  }
+
+  get gender() {
+    return this.registerForm.get('gender');
+  }
+
   get role() {
     return this.registerForm.get('role');
   }
@@ -78,11 +101,31 @@ export class RegisterComponent {
       this.isLoading = true;
       this.errorMessage = '';
 
-      this.authService.register(this.registerForm.value).subscribe({
-        next: (response) => {
-          this.isLoading = false;
-          this.router.navigate(['/auth/otp-verification'], {
-            queryParams: { email: this.registerForm.value.email }
+      const raw = this.registerForm.value as any;
+      const firstName = raw.firstName?.trim() || (raw.userName?.trim()?.split(' ')[0] || '');
+      const lastName = raw.lastName?.trim() || (raw.userName?.trim()?.split(' ').slice(1).join(' ') || '');
+      const payload = {
+        firstName,
+        lastName,
+        email: raw.email,
+        password: raw.password,
+        address: raw.address || '',
+        gender: raw.gender || ''
+      };
+
+      this.authService.register(payload as any).subscribe({
+        next: () => {
+          this.authService.sendOtp(this.registerForm.value.email).subscribe({
+            next: () => {
+              this.isLoading = false;
+              this.router.navigate(['/auth/otp-verification'], {
+                queryParams: { email: this.registerForm.value.email }
+              });
+            },
+            error: (err) => {
+              this.isLoading = false;
+              this.errorMessage = err.error?.message || 'Failed to send OTP. Please try again.';
+            }
           });
         },
         error: (error) => {

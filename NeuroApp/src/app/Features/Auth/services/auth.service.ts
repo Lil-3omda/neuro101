@@ -4,11 +4,12 @@ import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 
 export interface RegisterRequest {
-  userName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  confirmPassword: string;
-  role: string;
+  address: string;
+  gender: string;
 }
 
 export interface LoginRequest {
@@ -31,7 +32,12 @@ export interface AuthResponse {
 
 export interface OtpResponse {
   message: string;
-  success: boolean;
+  success?: boolean;
+}
+
+export interface VerifyOtpResponse {
+  message: string;
+  token: string;
 }
 
 @Injectable({
@@ -40,37 +46,46 @@ export interface OtpResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'https://localhost:7284/api/Auth';
+  private apiUrl = 'https://localhost:7011/api/Auth';
 
   register(data: RegisterRequest): Observable<OtpResponse> {
+        console.log(data);
+
     return this.http.post<OtpResponse>(`${this.apiUrl}/register`, data);
   }
 
-  login(data: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data).pipe(
+  login(data: LoginRequest): Observable<OtpResponse> {
+    return this.http.post<OtpResponse>(`${this.apiUrl}/login`, data);
+  }
+
+  verifyOtp(email: string, code: string): Observable<VerifyOtpResponse> {
+    return this.http.post<VerifyOtpResponse>(`${this.apiUrl}/verify-otp`, null, {
+      params: { email, code }
+    }).pipe(
       tap(response => {
-        this.setTokens(response.token, response.refreshToken);
-        this.setUserInfo(response.email, response.userName, response.role);
+        this.setToken(response.token);
       })
     );
   }
 
-  verifyOtp(data: VerifyOtpRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/verify-otp`, data).pipe(
-      tap(response => {
-        this.setTokens(response.token, response.refreshToken);
-        this.setUserInfo(response.email, response.userName, response.role);
-      })
-    );
+  sendOtp(email: string): Observable<OtpResponse> {
+    return this.http.post<OtpResponse>(`${this.apiUrl}/send-otp`, null, {
+      params: { email }
+    });
   }
 
+  // Backward-compatible alias
   resendOtp(email: string): Observable<OtpResponse> {
-    return this.http.post<OtpResponse>(`${this.apiUrl}/resend-otp`, { email });
+    return this.sendOtp(email);
   }
 
   private setTokens(token: string, refreshToken: string): void {
     localStorage.setItem('token', token);
     localStorage.setItem('refreshToken', refreshToken);
+  }
+
+  private setToken(token: string): void {
+    localStorage.setItem('token', token);
   }
 
   private setUserInfo(email: string, userName: string, role: string): void {

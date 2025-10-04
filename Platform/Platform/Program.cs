@@ -45,6 +45,8 @@ namespace Platform
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IOtpService, OtpService>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             builder.Services.AddScoped<IFileService, FileService>();
             builder.Services.AddScoped<IVideoService, VideoService>();
@@ -69,7 +71,18 @@ namespace Platform
             });
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
             builder.Services.AddScoped<ICourseService, CourseService>();
-            
+            // CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngular",
+                    builder => builder
+                        .WithOrigins("http://localhost:4200") // Angular dev server
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                );
+            });
+
 
 
             builder.Services.AddAuthentication(options =>
@@ -116,7 +129,7 @@ namespace Platform
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowAngular");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();

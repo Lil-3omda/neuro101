@@ -1,62 +1,66 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Platform.Core.Interfaces.IRepos;
-using Platform.Core.Interfaces.IUnitOfWork;
-using Platform.Core.Models;
-using Platform.Infrastructure.Data.DbContext;
-using Platform.Infrastructure.Repositories;
+﻿using Microsoft.AspNetCore.Mvc;
+using Platform.Application.DTOs;
+using Platform.Application.ServiceInterfaces;
 
-
-namespace Platform.Controllers
-{ 
-[Route("api/[controller]")]
+namespace Platform.Api.Controllers
+{
+    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> GetAllCategories([FromServices] IUnitOfWork unitOfWork)
+        private readonly ICategoryService _service;
+
+        public CategoryController(ICategoryService service)
         {
-            var categoryRepo = unitOfWork.Repository<Category>();
-            var categories = await categoryRepo.GetAllAsync();
+            _service = service;
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var categories = await _service.GetAllAsync();
             return Ok(categories);
         }
-        [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IActionResult> GetCategoryById(int id, [FromServices] IUnitOfWork unitOfWork)
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            var categoryRepo = unitOfWork.Repository<Category>();
-            var category = await categoryRepo.GetByIdAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
+            var category = await _service.GetByIdAsync(id);
+            if (category == null) return NotFound();
             return Ok(category);
         }
+
+
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] Category category, [FromServices] IUnitOfWork unitOfWork)
+        public async Task<IActionResult> Create([FromBody] CategoryCreateDto dto)
         {
-            var categoryRepo = unitOfWork.Repository<Category>();
-            await categoryRepo.AddAsync(category);
-            await unitOfWork.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetCategoryById), new { id = category.Id }, category);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var created = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category, [FromServices] IUnitOfWork unitOfWork)
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] CategoryUpdateDto dto)
         {
-            if (id != category.Id)
-            {
-                return BadRequest();
-            }
-            var categoryRepo = unitOfWork.Repository<Category>();
-            var existingCategory = await categoryRepo.GetByIdAsync(id);
-            if (existingCategory == null)
-            {
-                return NotFound();
-            }
-            existingCategory.Name = category.Name;
-            categoryRepo.Update(existingCategory);
-            await unitOfWork.SaveChangesAsync();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var updated = await _service.UpdateAsync(id, dto);
+            if (!updated) return NotFound();
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _service.DeleteAsync(id);
+            if (!deleted) return NotFound();
+
             return NoContent();
         }
     }

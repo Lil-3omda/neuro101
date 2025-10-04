@@ -96,12 +96,12 @@ export class OtpVerificationComponent implements OnInit {
 
       const otp = Object.values(this.otpForm.value).join('');
 
-      this.authService.verifyOtp({ email: this.email, otp }).subscribe({
-        next: (response) => {
+      this.authService.verifyOtp(this.email, otp).subscribe({
+        next: () => {
           this.isLoading = false;
           this.successMessage = 'Verification successful! Redirecting...';
           setTimeout(() => {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/']);
           }, 1500);
         },
         error: (error) => {

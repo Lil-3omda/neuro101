@@ -82,11 +82,13 @@ namespace Platform.Api.Controllers
             var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
             if (!result.Succeeded) return Unauthorized("Invalid credentials");
 
-            // Generate JWT
-            var token = GenerateJwtToken(user);
+            // ❌ Don't return token here yet
+            // Instead send OTP
+            var otp = await _otpService.GenerateOtpAsync(user.Id, user.Email, $"{user.FirstName} {user.LastName}");
 
-            return Ok(new { token });
+            return Ok(new { message = "OTP sent to email, please verify" });
         }
+
 
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUser()
@@ -169,7 +171,14 @@ namespace Platform.Api.Controllers
             var isValid = await _otpService.ValidateOtpAsync(user.Id, code);
             if (!isValid) return BadRequest("Invalid or expired OTP");
 
-            return Ok(new { message = "OTP verified successfully" });
+            // ✅ Generate JWT token after successful OTP verification
+            var token = GenerateJwtToken(user);
+
+            return Ok(new
+            {
+                message = "OTP verified successfully",
+                token
+            });
         }
     }
 }

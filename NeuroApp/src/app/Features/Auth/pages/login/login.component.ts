@@ -46,9 +46,12 @@ export class LoginComponent {
       this.errorMessage = '';
 
       this.authService.login(this.loginForm.value).subscribe({
-        next: (response) => {
+        next: () => {
+          // Backend already sends OTP on successful login
           this.isLoading = false;
-          this.router.navigate(['/home']);
+          this.router.navigate(['/auth/otp-verification'], {
+            queryParams: { email: this.loginForm.value.email }
+          });
         },
         error: (error) => {
           this.isLoading = false;

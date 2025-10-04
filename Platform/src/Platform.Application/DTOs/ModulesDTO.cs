@@ -14,11 +14,8 @@ namespace Platform.Application.DTOs
         public int Id { get; set; }
         public string Title { get; set; }
         public int ModuleArrangement { get; set; }
-      
         public int CourseId { get; set; }
-
-       
-        public  EnrolledCoursesDTO Course { get; set; }
-        public  ICollection<Video> Videos { get; set; }
+        public EnrolledCoursesDTO Course { get; set; }
+        public List<VideoDto> Videos { get; set; }
     }
 }

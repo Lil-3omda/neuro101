@@ -1,4 +1,5 @@
-﻿using Platform.Application.IRepos;
+﻿using Microsoft.EntityFrameworkCore;
+using Platform.Application.IRepos;
 using Platform.Core.Interfaces.IRepos;
 using Platform.Infrastructure.Data.DbContext;
 using System;
@@ -21,19 +22,21 @@ namespace Platform.Infrastructure.Repositories
 
 
 
-      
+        public new async Task<IEnumerable<Platform.Core.Models.Module>> GetAllAsync()
+        {
+            return await dbContext.Modules
+        .Include(m => m.Videos)
+        .Include(m => m.Course)
+        .ToListAsync();
 
-       
+        }
 
-        //public Task<IEnumerable<Module>> GetAllAsync()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public new async Task<Platform.Core.Models.Module?> GetByIdAsync(int id)
+        {
+            IEnumerable<Platform.Core.Models.Module> allModules = await GetAllAsync();
+            return allModules.SingleOrDefault(x => x.Id == id);
+        }
 
-        //public Task<Module?> GetByIdAsync(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         //public void Update(Module entity)
         //{

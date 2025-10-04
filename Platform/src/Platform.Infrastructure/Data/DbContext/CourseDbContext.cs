@@ -13,6 +13,7 @@ namespace Platform.Infrastructure.Data.DbContext
     {
         public CourseDbContext(DbContextOptions<CourseDbContext> options) : base(options)
         {
+
         }
         public DbSet<Courses> Courses { get; set; }
         public DbSet<Category> Categories { get; set; }

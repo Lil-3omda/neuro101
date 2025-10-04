@@ -29,7 +29,7 @@ namespace Platform.Infrastructure.UnitOfWork
         public IVedioRepository vedioRepository => new VideoRepository(_context);
 
         public IEnrollmentRepository enrollmentRepository => new EnrollmentRepository(_context);
-
+        public ICategoryRepository categoryRepository => new CategoryRepository(_context);
         public IModuleRepository moduleRepository => new ModuleRepository(_context);
 
         public void Dispose()
