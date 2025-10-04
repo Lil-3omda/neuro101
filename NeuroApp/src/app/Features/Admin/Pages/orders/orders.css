@@ -1,0 +1,51 @@
+/* Orders Page Styles */
+.orders-page {
+  min-height: 100vh;
+}
+
+.page-header h3 {
+  color: #333;
+  font-weight: 600;
+}
+
+.filters-bar {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.orders-table-container {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table thead th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.pagination-container {
+  padding-top: 20px;
+  border-top: 1px solid #dee2e6;
+}
+
+.pagination .page-link {
+  cursor: pointer;
+}
+
+.modal.show {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-item {
+  cursor: pointer;
+}

@@ -1,0 +1,184 @@
+<!-- Orders Management Page -->
+<div class="orders-page">
+  <div class="page-header mb-4">
+    <h3><i class="fas fa-shopping-cart me-2"></i>Orders Management</h3>
+    <p class="text-muted">View and manage all customer orders</p>
+  </div>
+
+  <!-- Search -->
+  <div class="filters-bar mb-4">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-search"></i></span>
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Search by order number or customer..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()">
+          <button class="btn btn-primary" (click)="onSearch()">Search</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="orders-table-container">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders">
+            <td><strong>{{ order.orderNumber }}</strong></td>
+            <td>{{ order.userName }}</td>
+            <td>{{ order.userEmail }}</td>
+            <td><strong>${{ order.totalAmount }}</strong></td>
+            <td>
+              <span class="badge bg-{{ getStatusBadgeClass(order.status) }}">
+                {{ order.status }}
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-{{ getPaymentStatusBadgeClass(order.paymentStatus) }}">
+                {{ order.paymentStatus }}
+              </span>
+            </td>
+            <td>{{ order.createdAt | date: 'MMM d, y' }}</td>
+            <td>
+              <div class="btn-group" role="group">
+                <button 
+                  class="btn btn-sm btn-outline-primary" 
+                  (click)="viewDetails(order)"
+                  title="View Details">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <div class="btn-group" role="group">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                          type="button" 
+                          data-bs-toggle="dropdown">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" (click)="updateOrderStatus(order, 'Processing')">Mark Processing</a></li>
+                    <li><a class="dropdown-item" (click)="updateOrderStatus(order, 'Shipped')">Mark Shipped</a></li>
+                    <li><a class="dropdown-item" (click)="updateOrderStatus(order, 'Delivered')">Mark Delivered</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" (click)="updateOrderStatus(order, 'Cancelled')">Cancel Order</a></li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="orders.length === 0 && !loading">
+            <td colspan="8" class="text-center text-muted py-5">
+              <i class="fas fa-shopping-cart fa-3x mb-3 d-block"></i>
+              <p>No orders found</p>
+            </td>
+          </tr>
+          <tr *ngIf="loading">
+            <td colspan="8" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status"></div>
+              <p class="mt-3">Loading orders...</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container d-flex justify-content-between align-items-center mt-4" *ngIf="!loading && orders.length > 0">
+      <div class="pagination-info">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} orders
+      </div>
+      <nav>
+        <ul class="pagination mb-0">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a class="page-link" (click)="onPageChange(currentPage - 1)">Previous</a>
+          </li>
+          <li class="page-item" *ngFor="let page of getPaginationArray()" [class.active]="page === currentPage">
+            <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a class="page-link" (click)="onPageChange(currentPage + 1)">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Order Details Modal -->
+<div class="modal fade" [class.show]="showDetailsModal" [style.display]="showDetailsModal ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Order Details - {{ selectedOrder?.orderNumber }}</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedOrder">
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <h6>Customer Information</h6>
+            <p class="mb-1"><strong>Name:</strong> {{ selectedOrder.userName }}</p>
+            <p class="mb-1"><strong>Email:</strong> {{ selectedOrder.userEmail }}</p>
+          </div>
+          <div class="col-md-6">
+            <h6>Order Information</h6>
+            <p class="mb-1"><strong>Order Date:</strong> {{ selectedOrder.createdAt | date: 'MMM d, y h:mm a' }}</p>
+            <p class="mb-1"><strong>Status:</strong> 
+              <span class="badge bg-{{ getStatusBadgeClass(selectedOrder.status) }}">{{ selectedOrder.status }}</span>
+            </p>
+            <p class="mb-1"><strong>Payment:</strong> 
+              <span class="badge bg-{{ getPaymentStatusBadgeClass(selectedOrder.paymentStatus) }}">{{ selectedOrder.paymentStatus }}</span>
+            </p>
+          </div>
+        </div>
+
+        <h6>Order Items</h6>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedOrder.items">
+                <td>{{ item.productName }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td><strong>${{ selectedOrder.totalAmount }}</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade" [class.show]="showDetailsModal" *ngIf="showDetailsModal"></div>
