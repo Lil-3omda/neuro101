@@ -11,9 +11,9 @@
       <div class="col-md-4">
         <div class="input-group">
           <span class="input-group-text"><i class="fas fa-search"></i></span>
-          <input 
-            type="text" 
-            class="form-control" 
+          <input
+            type="text"
+            class="form-control"
             placeholder="Search by name or email..."
             [(ngModel)]="searchTerm"
             (keyup.enter)="onSearch()">
@@ -66,8 +66,8 @@
           <tr *ngFor="let user of users">
             <td>
               <div class="d-flex align-items-center">
-                <img [src]="user.avatar || 'https://ui-avatars.com/api/?name=' + user.name" 
-                     class="user-avatar me-2" 
+                <img [src]="user.avatar || 'https://ui-avatars.com/api/?name=' + user.name"
+                     class="user-avatar me-2"
                      [alt]="user.name">
                 <strong>{{ user.name }}</strong>
               </div>
@@ -88,28 +88,28 @@
             <td>{{ user.lastLogin ? (user.lastLogin | date: 'MMM d, y') : 'Never' }}</td>
             <td>
               <div class="btn-group" role="group">
-                <button 
-                  class="btn btn-sm btn-outline-primary" 
+                <button
+                  class="btn btn-sm btn-outline-primary"
                   (click)="editUser(user)"
                   title="Edit">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button 
-                  *ngIf="user.status === 'Active'" 
-                  class="btn btn-sm btn-outline-warning" 
+                <button
+                  *ngIf="user.status === 'Active'"
+                  class="btn btn-sm btn-outline-warning"
                   (click)="deactivateUser(user)"
                   title="Deactivate">
                   <i class="fas fa-ban"></i>
                 </button>
-                <button 
-                  *ngIf="user.status === 'Inactive'" 
-                  class="btn btn-sm btn-outline-success" 
+                <button
+                  *ngIf="user.status === 'Inactive'"
+                  class="btn btn-sm btn-outline-success"
                   (click)="activateUser(user)"
                   title="Activate">
                   <i class="fas fa-check"></i>
                 </button>
-                <button 
-                  class="btn btn-sm btn-outline-danger" 
+                <button
+                  class="btn btn-sm btn-outline-danger"
                   (click)="confirmDelete(user)"
                   title="Delete">
                   <i class="fas fa-trash"></i>
@@ -138,7 +138,7 @@
     <!-- Pagination -->
     <div class="pagination-container d-flex justify-content-between align-items-center mt-4" *ngIf="!loading && users.length > 0">
       <div class="pagination-info">
-        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} users
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ (currentPage * pageSize) < totalCount ? (currentPage * pageSize) : totalCount }} of {{ totalCount }} users
       </div>
       <nav>
         <ul class="pagination mb-0">

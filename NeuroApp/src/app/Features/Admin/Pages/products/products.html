@@ -11,9 +11,9 @@
       <div class="col-md-6">
         <div class="input-group">
           <span class="input-group-text"><i class="fas fa-search"></i></span>
-          <input 
-            type="text" 
-            class="form-control" 
+          <input
+            type="text"
+            class="form-control"
             placeholder="Search products..."
             [(ngModel)]="searchTerm"
             (keyup.enter)="onSearch()">
@@ -64,21 +64,21 @@
             <td>{{ product.createdAt | date: 'MMM d, y' }}</td>
             <td>
               <div class="btn-group" role="group">
-                <button 
-                  class="btn btn-sm btn-outline-primary" 
+                <button
+                  class="btn btn-sm btn-outline-primary"
                   (click)="editProduct(product)"
                   title="Edit">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button 
-                  *ngIf="product.status === 'Draft'" 
-                  class="btn btn-sm btn-outline-success" 
+                <button
+                  *ngIf="product.status === 'Draft'"
+                  class="btn btn-sm btn-outline-success"
                   (click)="approveProduct(product)"
                   title="Approve">
                   <i class="fas fa-check"></i>
                 </button>
-                <button 
-                  class="btn btn-sm btn-outline-danger" 
+                <button
+                  class="btn btn-sm btn-outline-danger"
                   (click)="confirmDelete(product)"
                   title="Delete">
                   <i class="fas fa-trash"></i>
@@ -105,7 +105,7 @@
     <!-- Pagination -->
     <div class="pagination-container d-flex justify-content-between align-items-center mt-4" *ngIf="!loading && products.length > 0">
       <div class="pagination-info">
-        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalCount) }} of {{ totalCount }} products
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ getToCount() }} of {{ totalCount }} products
       </div>
       <nav>
         <ul class="pagination mb-0">

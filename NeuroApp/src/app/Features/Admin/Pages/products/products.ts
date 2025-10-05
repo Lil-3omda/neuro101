@@ -15,7 +15,7 @@ export class AdminProducts implements OnInit {
   products: IProduct[] = [];
   loading = false;
   searchTerm = '';
-  
+
   currentPage = 1;
   pageSize = 10;
   totalPages = 1;
@@ -30,7 +30,13 @@ export class AdminProducts implements OnInit {
   ngOnInit() {
     this.loadProducts();
   }
-
+getToCount(): number {
+  if (!this.products || this.products.length === 0) {
+    return 0;
+  }
+  const to = (this.currentPage - 1) * this.pageSize + this.products.length;
+  return to > this.totalCount ? this.totalCount : to;
+}
   loadProducts() {
     this.loading = true;
     const params: IPaginationParams = {

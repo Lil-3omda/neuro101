@@ -15,7 +15,7 @@ export class AdminOrders implements OnInit {
   orders: IOrder[] = [];
   loading = false;
   searchTerm = '';
-  
+
   currentPage = 1;
   pageSize = 10;
   totalPages = 1;
@@ -29,7 +29,10 @@ export class AdminOrders implements OnInit {
   ngOnInit() {
     this.loadOrders();
   }
-
+getPageEnd(): number {
+  const end = this.currentPage * this.pageSize;
+  return end > this.totalCount ? this.totalCount : end;
+}
   loadOrders() {
     this.loading = true;
     const params: IPaginationParams = {

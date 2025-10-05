@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environments';
+import { environment } from '../../../../environments/environments.development';
 import {
   IUser,
   IUserCreate,
@@ -28,12 +28,12 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   // ==================== USER MANAGEMENT ====================
-  
+
   getUsers(params: IPaginationParams): Observable<IPaginatedResponse<IUser>> {
     let httpParams = new HttpParams()
       .set('page', params.page.toString())
       .set('pageSize', params.pageSize.toString());
-    
+
     if (params.search) {
       httpParams = httpParams.set('search', params.search);
     }
@@ -72,12 +72,12 @@ export class AdminService {
   }
 
   // ==================== PRODUCT MANAGEMENT ====================
-  
+
   getProducts(params: IPaginationParams): Observable<IPaginatedResponse<IProduct>> {
     let httpParams = new HttpParams()
       .set('page', params.page.toString())
       .set('pageSize', params.pageSize.toString());
-    
+
     if (params.search) {
       httpParams = httpParams.set('search', params.search);
     }
@@ -106,12 +106,12 @@ export class AdminService {
   }
 
   // ==================== ORDER MANAGEMENT ====================
-  
+
   getOrders(params: IPaginationParams): Observable<IPaginatedResponse<IOrder>> {
     let httpParams = new HttpParams()
       .set('page', params.page.toString())
       .set('pageSize', params.pageSize.toString());
-    
+
     if (params.search) {
       httpParams = httpParams.set('search', params.search);
     }
@@ -132,15 +132,15 @@ export class AdminService {
   }
 
   // ==================== CATEGORY MANAGEMENT ====================
-  
+
   getCategories(params?: IPaginationParams): Observable<IPaginatedResponse<ICategory>> {
     let httpParams = new HttpParams();
-    
+
     if (params) {
       httpParams = httpParams
         .set('page', params.page.toString())
         .set('pageSize', params.pageSize.toString());
-      
+
       if (params.search) {
         httpParams = httpParams.set('search', params.search);
       }
@@ -166,7 +166,7 @@ export class AdminService {
   }
 
   // ==================== ANALYTICS ====================
-  
+
   getAnalytics(): Observable<IAnalytics> {
     return this.http.get<IAnalytics>(`${this.apiUrl}/admin/analytics`);
   }
