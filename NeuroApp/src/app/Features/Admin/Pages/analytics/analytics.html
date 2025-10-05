@@ -2,7 +2,7 @@
 <div class="analytics-page">
   <div class="page-header mb-4">
     <h3><i class="fas fa-chart-line me-2"></i>Analytics & Reports</h3>
-    <p class="text-muted">Comprehensive insights and performance metrics</p>
+    <p class="text-muted">Course platform insights and performance metrics</p>
   </div>
 
   <div *ngIf="loading" class="text-center py-5">
@@ -16,11 +16,11 @@
       <div class="col-xl-3 col-md-6 mb-4">
         <div class="stats-card users">
           <div class="stats-icon">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-user-graduate"></i>
           </div>
           <div class="stats-content">
             <h3>{{ analytics.totalUsers | number }}</h3>
-            <p class="text-muted mb-0">Total Users</p>
+            <p class="text-muted mb-0">Total Students</p>
             <small class="text-success">
               <i class="fas fa-arrow-up"></i> {{ analytics.activeUsers }} active
             </small>
@@ -31,13 +31,13 @@
       <div class="col-xl-3 col-md-6 mb-4">
         <div class="stats-card products">
           <div class="stats-icon">
-            <i class="fas fa-box"></i>
+            <i class="fas fa-graduation-cap"></i>
           </div>
           <div class="stats-content">
             <h3>{{ analytics.totalProducts | number }}</h3>
-            <p class="text-muted mb-0">Total Products</p>
-            <small class="text-warning">
-              <i class="fas fa-exclamation-triangle"></i> {{ analytics.lowStockProducts }} low stock
+            <p class="text-muted mb-0">Total Courses</p>
+            <small class="text-info">
+              <i class="fas fa-book"></i> Active courses
             </small>
           </div>
         </div>
@@ -46,13 +46,13 @@
       <div class="col-xl-3 col-md-6 mb-4">
         <div class="stats-card orders">
           <div class="stats-icon">
-            <i class="fas fa-shopping-cart"></i>
+            <i class="fas fa-user-check"></i>
           </div>
           <div class="stats-content">
             <h3>{{ analytics.totalOrders | number }}</h3>
-            <p class="text-muted mb-0">Total Orders</p>
-            <small class="text-info">
-              <i class="fas fa-clock"></i> {{ analytics.pendingOrders }} pending
+            <p class="text-muted mb-0">Total Enrollments</p>
+            <small class="text-success">
+              <i class="fas fa-chart-line"></i> Growing
             </small>
           </div>
         </div>
@@ -61,13 +61,13 @@
       <div class="col-xl-3 col-md-6 mb-4">
         <div class="stats-card revenue">
           <div class="stats-icon">
-            <i class="fas fa-dollar-sign"></i>
+            <i class="fas fa-chalkboard-teacher"></i>
           </div>
           <div class="stats-content">
-            <h3>${{ analytics.totalRevenue | number }}</h3>
-            <p class="text-muted mb-0">Total Revenue</p>
+            <h3>142</h3>
+            <p class="text-muted mb-0">Total Instructors</p>
             <small class="text-success">
-              <i class="fas fa-arrow-up"></i> 15.3% from last month
+              <i class="fas fa-arrow-up"></i> 12 verified this month
             </small>
           </div>
         </div>
@@ -80,7 +80,7 @@
       <div class="col-lg-8 mb-4">
         <div class="chart-card">
           <div class="chart-header">
-            <h5><i class="fas fa-chart-bar me-2"></i>Sales Overview</h5>
+            <h5><i class="fas fa-chart-bar me-2"></i>Enrollments Overview</h5>
             <div class="btn-group btn-group-sm" role="group">
               <button type="button" class="btn btn-outline-primary active">6 Months</button>
               <button type="button" class="btn btn-outline-primary">1 Year</button>
@@ -98,7 +98,7 @@
                     </div>
                   </div>
                   <div class="bar-label">{{ month.month }}</div>
-                  <div class="bar-value">${{ month.sales / 1000 }}k</div>
+                  <div class="bar-value">{{ month.sales }}</div>
                 </div>
               </div>
             </div>
@@ -152,20 +152,20 @@
               <tbody>
                 <tr>
                   <td><span class="badge bg-warning text-dark">1</span></td>
-                  <td>Best Selling Product</td>
-                  <td>Angular Course</td>
+                  <td>Most Popular Course</td>
+                  <td>Deep Learning</td>
                   <td><span class="text-success">+25%</span></td>
                 </tr>
                 <tr>
                   <td><span class="badge bg-secondary">2</span></td>
-                  <td>Most Active Category</td>
-                  <td>Programming</td>
+                  <td>Top Category</td>
+                  <td>Machine Learning</td>
                   <td><span class="text-success">+18%</span></td>
                 </tr>
                 <tr>
                   <td><span class="badge bg-secondary">3</span></td>
                   <td>Top Instructor</td>
-                  <td>Dr. Michael Chen</td>
+                  <td>Dr. Sarah Johnson</td>
                   <td><span class="text-success">+32%</span></td>
                 </tr>
               </tbody>
@@ -179,24 +179,24 @@
         <div class="metrics-card">
           <h5 class="mb-4"><i class="fas fa-clock me-2"></i>Performance Metrics</h5>
           <div class="metric-row">
-            <div class="metric-label">Average Order Value</div>
-            <div class="metric-value">$145.50</div>
-          </div>
-          <div class="metric-row">
-            <div class="metric-label">Conversion Rate</div>
-            <div class="metric-value">3.2%</div>
-          </div>
-          <div class="metric-row">
-            <div class="metric-label">Customer Satisfaction</div>
+            <div class="metric-label">Average Course Rating</div>
             <div class="metric-value">4.7/5.0</div>
           </div>
           <div class="metric-row">
-            <div class="metric-label">Return Rate</div>
-            <div class="metric-value">2.1%</div>
+            <div class="metric-label">Completion Rate</div>
+            <div class="metric-value">68.3%</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Student Satisfaction</div>
+            <div class="metric-value">4.8/5.0</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Active Learning Hours</div>
+            <div class="metric-value">12,450</div>
           </div>
           <div class="metric-row">
             <div class="metric-label">Growth Rate</div>
-            <div class="metric-value text-success">+12.5%</div>
+            <div class="metric-value text-success">+15.7%</div>
           </div>
         </div>
       </div>

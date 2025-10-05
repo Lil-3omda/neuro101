@@ -13,16 +13,16 @@ import { AdminService } from '../../Services/admin.service';
 export class AdminDashboard implements OnInit {
   stats = {
     totalUsers: 0,
-    totalProducts: 0,
-    totalOrders: 0,
-    totalRevenue: 0,
-    activeUsers: 0,
-    pendingOrders: 0,
-    lowStockProducts: 0
+    totalCourses: 0,
+    totalEnrollments: 0,
+    totalInstructors: 0,
+    activeStudents: 0,
+    pendingInstructors: 0,
+    totalCategories: 0
   };
 
   recentUsers: any[] = [];
-  recentOrders: any[] = [];
+  recentEnrollments: any[] = [];
   loading = true;
 
   constructor(private adminService: AdminService) {}
@@ -33,8 +33,7 @@ export class AdminDashboard implements OnInit {
 
   loadDashboardData() {
     this.loading = true;
-    
-    // Load dashboard stats
+
     this.adminService.getDashboardStats().subscribe({
       next: (data) => {
         this.stats = data;
@@ -42,17 +41,15 @@ export class AdminDashboard implements OnInit {
       },
       error: (error) => {
         console.error('Error loading dashboard stats:', error);
-        // Set mock data for demonstration
         this.setMockData();
         this.loading = false;
       }
     });
 
-    // Load analytics for recent data
     this.adminService.getAnalytics().subscribe({
       next: (data) => {
         this.recentUsers = data.recentUsers || [];
-        this.recentOrders = data.recentOrders || [];
+        this.recentEnrollments = data.recentEnrollments || [];
       },
       error: (error) => {
         console.error('Error loading analytics:', error);
@@ -63,12 +60,12 @@ export class AdminDashboard implements OnInit {
   setMockData() {
     this.stats = {
       totalUsers: 1547,
-      totalProducts: 342,
-      totalOrders: 856,
-      totalRevenue: 124500,
-      activeUsers: 1203,
-      pendingOrders: 45,
-      lowStockProducts: 12
+      totalCourses: 342,
+      totalEnrollments: 856,
+      totalInstructors: 89,
+      activeStudents: 1203,
+      pendingInstructors: 12,
+      totalCategories: 15
     };
 
     this.recentUsers = [
@@ -77,19 +74,18 @@ export class AdminDashboard implements OnInit {
       { id: '3', name: 'Bob Johnson', email: 'bob@example.com', role: 'Student', createdAt: new Date() }
     ];
 
-    this.recentOrders = [
-      { id: '1', orderNumber: 'ORD-001', userName: 'John Doe', totalAmount: 299, status: 'Pending', createdAt: new Date() },
-      { id: '2', orderNumber: 'ORD-002', userName: 'Jane Smith', totalAmount: 599, status: 'Processing', createdAt: new Date() },
-      { id: '3', orderNumber: 'ORD-003', userName: 'Bob Johnson', totalAmount: 199, status: 'Delivered', createdAt: new Date() }
+    this.recentEnrollments = [
+      { id: '1', studentName: 'John Doe', courseName: 'Machine Learning Basics', enrollmentDate: new Date(), status: 'Active' },
+      { id: '2', studentName: 'Jane Smith', courseName: 'Deep Learning Advanced', enrollmentDate: new Date(), status: 'Active' },
+      { id: '3', studentName: 'Bob Johnson', courseName: 'Natural Language Processing', enrollmentDate: new Date(), status: 'Completed' }
     ];
   }
 
   getStatusClass(status: string): string {
     const statusMap: { [key: string]: string } = {
-      'Pending': 'warning',
-      'Processing': 'info',
-      'Shipped': 'primary',
-      'Delivered': 'success',
+      'Active': 'success',
+      'Completed': 'primary',
+      'In Progress': 'info',
       'Cancelled': 'danger'
     };
     return statusMap[status] || 'secondary';

@@ -47,19 +47,17 @@ export class AdminAnalytics implements OnInit {
       recentUsers: [],
       recentOrders: [],
       salesByMonth: [
-        { month: 'Jan', sales: 12000, orders: 85 },
-        { month: 'Feb', sales: 15000, orders: 102 },
-        { month: 'Mar', sales: 18000, orders: 125 },
-        { month: 'Apr', sales: 22000, orders: 148 },
-        { month: 'May', sales: 25000, orders: 167 },
-        { month: 'Jun', sales: 28000, orders: 189 }
+        { month: 'Jan', sales: 450, orders: 85 },
+        { month: 'Feb', sales: 620, orders: 102 },
+        { month: 'Mar', sales: 780, orders: 125 },
+        { month: 'Apr', sales: 950, orders: 148 },
+        { month: 'May', sales: 1100, orders: 167 },
+        { month: 'Jun', sales: 1280, orders: 189 }
       ],
       usersByRole: [
-        { role: 'Student', count: 1200 },
-        { role: 'Instructor', count: 234 },
-        { role: 'Admin', count: 15 },
-        { role: 'Seller', count: 67 },
-        { role: 'Customer', count: 31 }
+        { role: 'Student', count: 1350 },
+        { role: 'Instructor', count: 142 },
+        { role: 'Admin', count: 15 }
       ]
     };
   }
@@ -87,10 +85,8 @@ export class AdminAnalytics implements OnInit {
   getRoleColor(role: string): string {
     const colors: { [key: string]: string } = {
       'Student': '#4361ee',
-      'Instructor': '#4cc9f0',
-      'Admin': '#f72585',
-      'Seller': '#f59e0b',
-      'Customer': '#10b981'
+      'Instructor': '#10b981',
+      'Admin': '#f72585'
     };
     return colors[role] || '#6c757d';
   }

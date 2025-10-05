@@ -8,56 +8,49 @@
 
     <ul class="nav flex-column mt-4">
       <li class="nav-item">
-        <a class="nav-link" 
-           routerLink="/admin/dashboard" 
+        <a class="nav-link"
+           routerLink="/admin/dashboard"
            routerLinkActive="active">
           <i class="fas fa-home"></i><span>Dashboard</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" 
-           routerLink="/admin/analytics" 
+        <a class="nav-link"
+           routerLink="/admin/analytics"
            routerLinkActive="active">
           <i class="fas fa-chart-line"></i><span>Analytics</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" 
-           routerLink="/admin/users" 
+        <a class="nav-link"
+           routerLink="/admin/courses"
            routerLinkActive="active">
-          <i class="fas fa-users"></i><span>Users</span>
+          <i class="fas fa-graduation-cap"></i><span>Courses</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" 
-           routerLink="/admin/products" 
+        <a class="nav-link"
+           routerLink="/admin/instructors"
            routerLinkActive="active">
-          <i class="fas fa-box"></i><span>Products</span>
+          <i class="fas fa-chalkboard-teacher"></i><span>Instructors</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" 
-           routerLink="/admin/orders" 
+        <a class="nav-link"
+           routerLink="/admin/users"
            routerLinkActive="active">
-          <i class="fas fa-shopping-cart"></i><span>Orders</span>
+          <i class="fas fa-users"></i><span>Students</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" 
-           routerLink="/admin/categories" 
+        <a class="nav-link"
+           routerLink="/admin/categories"
            routerLinkActive="active">
           <i class="fas fa-tags"></i><span>Categories</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" 
-           routerLink="/admin/settings" 
-           routerLinkActive="active">
-          <i class="fas fa-cog"></i><span>Settings</span>
-        </a>
-      </li>
       <li class="nav-item mt-3">
-        <a class="nav-link logout-link" 
+        <a class="nav-link logout-link"
            (click)="logout()"
            style="cursor: pointer;">
           <i class="fas fa-sign-out-alt"></i><span>Logout</span>

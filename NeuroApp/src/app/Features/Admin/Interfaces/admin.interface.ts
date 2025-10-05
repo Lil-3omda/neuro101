@@ -127,6 +127,7 @@ export interface IAnalytics {
   lowStockProducts: number;
   recentUsers: IUser[];
   recentOrders: IOrder[];
+  recentEnrollments?: any[];
   salesByMonth: ISalesData[];
   usersByRole: IUserRoleData[];
 }
