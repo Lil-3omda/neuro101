@@ -3,7 +3,7 @@ export interface IUser {
   id: string;
   name: string;
   email: string;
-  role: 'Student' | 'Instructor' | 'Admin' | 'Seller' | 'Customer';
+  role: 'Student' | 'Instructor' | 'Admin';
   status: 'Active' | 'Inactive' | 'Suspended';
   createdAt: Date;
   lastLogin?: Date;
@@ -28,89 +28,155 @@ export interface IUserUpdate {
   phone?: string;
 }
 
-// Product Interfaces
-export interface IProduct {
-  id: string;
-  name: string;
+// Course Interfaces
+export interface ICourse {
+  id: number;
+  title: string;
   description: string;
+  thumbnailUrl?: string;
   price: number;
-  stock: number;
-  categoryId: string;
-  categoryName: string;
-  status: 'Draft' | 'Published' | 'Archived';
-  images?: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  isFree: boolean;
+  instructorId: number;
+  categoryId: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  instructorName?: string;
+  categoryName?: string;
+  enrollmentsCount?: number;
 }
 
-export interface IProductCreate {
-  name: string;
+export interface ICourseCreate {
+  title: string;
   description: string;
+  thumbnailUrl?: string;
   price: number;
-  stock: number;
-  categoryId: string;
-  status: string;
+  isFree: boolean;
+  instructorId: number;
+  categoryId: number;
 }
 
-export interface IProductUpdate {
-  id: string;
-  name?: string;
+export interface ICourseUpdate {
+  id: number;
+  title?: string;
   description?: string;
+  thumbnailUrl?: string;
   price?: number;
-  stock?: number;
-  categoryId?: string;
-  status?: string;
+  isFree?: boolean;
+  categoryId?: number;
 }
 
-// Order Interfaces
-export interface IOrder {
-  id: string;
-  orderNumber: string;
+// Instructor Interfaces
+export interface IInstructor {
+  id: number;
   userId: string;
-  userName: string;
-  userEmail: string;
-  totalAmount: number;
-  status: 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled';
-  paymentStatus: 'Pending' | 'Paid' | 'Failed' | 'Refunded';
-  items: IOrderItem[];
-  createdAt: Date;
-  updatedAt: Date;
+  expertise: string;
+  bio: string;
+  isVerified: boolean;
+  createdAt?: Date;
+  coursesCount?: number;
+  studentCount?: number;
 }
 
-export interface IOrderItem {
-  productId: string;
-  productName: string;
-  quantity: number;
-  price: number;
-  subtotal: number;
+export interface IInstructorRegister {
+  email: string;
+  password: string;
+  name: string;
+  expertise: string;
+  bio: string;
 }
 
-export interface IOrderUpdate {
-  id: string;
+// Enrollment Interfaces
+export interface IEnrollment {
+  enrollmentId: number;
+  studentId: string;
+  courseId: number;
+  enrollmentDate: Date;
+  status: 'Active' | 'Completed' | 'Cancelled';
+  progress?: number;
+  courseName?: string;
+  studentName?: string;
+  instructorId?: number;
+}
+
+export interface IEnrollmentCreate {
+  studentId: string;
+  courseId: number;
+}
+
+export interface IEnrollmentUpdate {
+  enrollmentId: number;
   status?: string;
-  paymentStatus?: string;
+}
+
+// Module Interfaces
+export interface IModule {
+  moduleId: number;
+  courseId: number;
+  moduleName: string;
+  moduleDescription: string;
+  moduleOrder: number;
+  videosCount?: number;
+}
+
+export interface IModuleCreate {
+  courseId: number;
+  moduleName: string;
+  moduleDescription: string;
+  moduleOrder: number;
+}
+
+export interface IModuleUpdate {
+  moduleId: number;
+  moduleName?: string;
+  moduleDescription?: string;
+  moduleOrder?: number;
+}
+
+// Video Interfaces
+export interface IVideo {
+  id: number;
+  moduleId: number;
+  title: string;
+  videoUrl: string;
+  duration?: number;
+  videoOrder: number;
+  moduleName?: string;
+}
+
+export interface IVideoUpload {
+  moduleId: number;
+  title: string;
+  videoUrl: string;
+  duration?: number;
+  videoOrder: number;
+}
+
+export interface IVideoUpdate {
+  id: number;
+  title?: string;
+  videoUrl?: string;
+  duration?: number;
+  videoOrder?: number;
 }
 
 // Category Interfaces
 export interface ICategory {
-  id: string;
+  id: number;
   name: string;
   description?: string;
-  parentId?: string;
   isActive: boolean;
-  productsCount?: number;
-  createdAt: Date;
+  coursesCount?: number;
+  createdAt?: Date;
 }
 
 export interface ICategoryCreate {
   name: string;
   description?: string;
-  parentId?: string;
   isActive: boolean;
 }
 
 export interface ICategoryUpdate {
-  id: string;
+  id: number;
   name?: string;
   description?: string;
   isActive?: boolean;
@@ -119,28 +185,37 @@ export interface ICategoryUpdate {
 // Analytics Interfaces
 export interface IAnalytics {
   totalUsers: number;
-  totalProducts: number;
-  totalOrders: number;
-  totalRevenue: number;
-  activeUsers: number;
-  pendingOrders: number;
-  lowStockProducts: number;
-  recentUsers: IUser[];
-  recentOrders: IOrder[];
-  recentEnrollments?: any[];
-  salesByMonth: ISalesData[];
-  usersByRole: IUserRoleData[];
+  totalCourses: number;
+  totalEnrollments: number;
+  totalInstructors: number;
+  activeStudents: number;
+  pendingInstructors: number;
+  totalCategories: number;
+  recentEnrollments: IEnrollment[];
+  enrollmentsByMonth: IEnrollmentData[];
+  coursesByCategory: ICategoryData[];
+  topInstructors?: IInstructor[];
 }
 
-export interface ISalesData {
+export interface IEnrollmentData {
   month: string;
-  sales: number;
-  orders: number;
+  enrollments: number;
+  completions: number;
 }
 
-export interface IUserRoleData {
-  role: string;
-  count: number;
+export interface ICategoryData {
+  categoryName: string;
+  coursesCount: number;
+}
+
+export interface IDashboardStats {
+  totalUsers: number;
+  totalCourses: number;
+  totalEnrollments: number;
+  totalInstructors: number;
+  activeStudents: number;
+  pendingInstructors: number;
+  totalCategories: number;
 }
 
 // Pagination

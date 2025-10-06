@@ -35,59 +35,29 @@ export class AdminAnalytics implements OnInit {
     });
   }
 
-  setMockAnalytics() {
-    this.analytics = {
-      totalUsers: 1547,
-      totalProducts: 342,
-      totalOrders: 856,
-      totalRevenue: 124500,
-      activeUsers: 1203,
-      pendingOrders: 45,
-      lowStockProducts: 12,
-      recentUsers: [],
-      recentOrders: [],
-      salesByMonth: [
-        { month: 'Jan', sales: 450, orders: 85 },
-        { month: 'Feb', sales: 620, orders: 102 },
-        { month: 'Mar', sales: 780, orders: 125 },
-        { month: 'Apr', sales: 950, orders: 148 },
-        { month: 'May', sales: 1100, orders: 167 },
-        { month: 'Jun', sales: 1280, orders: 189 }
-      ],
-      usersByRole: [
-        { role: 'Student', count: 1350 },
-        { role: 'Instructor', count: 142 },
-        { role: 'Admin', count: 15 }
-      ]
-    };
+
+  getMaxEnrollments(): number {
+    if (!this.analytics?.enrollmentsByMonth) return 0;
+    return Math.max(...this.analytics.enrollmentsByMonth.map(e => e.enrollments));
   }
 
-  getMaxSales(): number {
-    if (!this.analytics?.salesByMonth) return 0;
-    return Math.max(...this.analytics.salesByMonth.map(s => s.sales));
+  getEnrollmentPercentage(enrollments: number): number {
+    const max = this.getMaxEnrollments();
+    return max > 0 ? (enrollments / max) * 100 : 0;
   }
 
-  getSalesPercentage(sales: number): number {
-    const max = this.getMaxSales();
-    return max > 0 ? (sales / max) * 100 : 0;
+  getTotalCoursesCount(): number {
+    if (!this.analytics?.coursesByCategory) return 0;
+    return this.analytics.coursesByCategory.reduce((sum, cat) => sum + cat.coursesCount, 0);
   }
 
-  getTotalUsersCount(): number {
-    if (!this.analytics?.usersByRole) return 0;
-    return this.analytics.usersByRole.reduce((sum, role) => sum + role.count, 0);
-  }
-
-  getUserRolePercentage(count: number): number {
-    const total = this.getTotalUsersCount();
+  getCategoryPercentage(count: number): number {
+    const total = this.getTotalCoursesCount();
     return total > 0 ? (count / total) * 100 : 0;
   }
 
-  getRoleColor(role: string): string {
-    const colors: { [key: string]: string } = {
-      'Student': '#4361ee',
-      'Instructor': '#10b981',
-      'Admin': '#f72585'
-    };
-    return colors[role] || '#6c757d';
+  getCategoryColor(index: number): string {
+    const colors = ['#4361ee', '#10b981', '#f72585', '#f59e0b', '#8b5cf6', '#06b6d4'];
+    return colors[index % colors.length];
   }
 }

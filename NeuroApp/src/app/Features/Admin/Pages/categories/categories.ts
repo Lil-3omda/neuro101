@@ -35,46 +35,24 @@ export class AdminCategories implements OnInit {
   loadCategories() {
     this.loading = true;
     this.adminService.getCategories().subscribe({
-      next: (response) => {
-        this.categories = response.data;
+      next: (categories) => {
+        this.categories = categories.map((cat: any) => ({
+          id: cat.id.toString(),
+          name: cat.name,
+          description: cat.description || '',
+          isActive: cat.isActive,
+          productsCount: cat.coursesCount || 0,
+          createdAt: cat.createdAt || new Date()
+        }));
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading categories:', error);
-        this.setMockCategories();
         this.loading = false;
       }
     });
   }
 
-  setMockCategories() {
-    this.categories = [
-      {
-        id: '1',
-        name: 'Programming',
-        description: 'Programming courses and resources',
-        isActive: true,
-        productsCount: 45,
-        createdAt: new Date()
-      },
-      {
-        id: '2',
-        name: 'Design',
-        description: 'Design and creative courses',
-        isActive: true,
-        productsCount: 32,
-        createdAt: new Date()
-      },
-      {
-        id: '3',
-        name: 'Business',
-        description: 'Business and management courses',
-        isActive: true,
-        productsCount: 28,
-        createdAt: new Date()
-      }
-    ];
-  }
 
   showAddCategoryModal() {
     this.newCategory = {
@@ -86,11 +64,25 @@ export class AdminCategories implements OnInit {
   }
 
   addCategory() {
-    this.adminService.createCategory(this.newCategory).subscribe({
-      next: (category) => {
-        this.categories.push(category);
+    const categoryData = {
+      name: this.newCategory.name,
+      description: this.newCategory.description,
+      isActive: this.newCategory.isActive
+    };
+
+    this.adminService.createCategory(categoryData).subscribe({
+      next: (category: any) => {
+        this.categories.push({
+          id: category.id.toString(),
+          name: category.name,
+          description: category.description || '',
+          isActive: category.isActive,
+          productsCount: 0,
+          createdAt: new Date()
+        });
         this.showAddModal = false;
         alert('Category created successfully');
+        this.loadCategories();
       },
       error: (error) => {
         console.error('Error creating category:', error);
@@ -106,11 +98,25 @@ export class AdminCategories implements OnInit {
 
   updateCategory() {
     if (this.selectedCategory) {
-      this.adminService.updateCategory(this.selectedCategory.id, this.selectedCategory).subscribe({
-        next: (updated) => {
-          const index = this.categories.findIndex(c => c.id === updated.id);
+      const updateData = {
+        id: parseInt(this.selectedCategory.id),
+        name: this.selectedCategory.name,
+        description: this.selectedCategory.description,
+        isActive: this.selectedCategory.isActive
+      };
+
+      this.adminService.updateCategory(parseInt(this.selectedCategory.id), updateData).subscribe({
+        next: (updated: any) => {
+          const index = this.categories.findIndex(c => c.id === this.selectedCategory?.id);
           if (index !== -1) {
-            this.categories[index] = updated;
+            this.categories[index] = {
+              id: updated.id.toString(),
+              name: updated.name,
+              description: updated.description || '',
+              isActive: updated.isActive,
+              productsCount: this.categories[index].productsCount,
+              createdAt: updated.createdAt || this.categories[index].createdAt
+            };
           }
           this.showEditModal = false;
           alert('Category updated successfully');
@@ -130,7 +136,7 @@ export class AdminCategories implements OnInit {
 
   deleteCategory() {
     if (this.selectedCategory) {
-      this.adminService.deleteCategory(this.selectedCategory.id).subscribe({
+      this.adminService.deleteCategory(parseInt(this.selectedCategory.id)).subscribe({
         next: () => {
           this.categories = this.categories.filter(c => c.id !== this.selectedCategory?.id);
           this.showDeleteModal = false;
