@@ -37,13 +37,13 @@ export class AdminCategories implements OnInit {
     this.adminService.getCategories().subscribe({
       next: (categories) => {
         this.categories = categories.map((cat: any) => ({
-          id: cat.id.toString(),
+          id: cat.id as number,
           name: cat.name,
           description: cat.description || '',
           isActive: cat.isActive,
-          productsCount: cat.coursesCount || 0,
+          coursesCount: cat.coursesCount || 0,
           createdAt: cat.createdAt || new Date()
-        }));
+        } as ICategory));
         this.loading = false;
       },
       error: (error) => {
@@ -73,13 +73,13 @@ export class AdminCategories implements OnInit {
     this.adminService.createCategory(categoryData).subscribe({
       next: (category: any) => {
         this.categories.push({
-          id: category.id.toString(),
+          id: category.id as number,
           name: category.name,
           description: category.description || '',
           isActive: category.isActive,
-          productsCount: 0,
+          coursesCount: 0,
           createdAt: new Date()
-        });
+        } as ICategory);
         this.showAddModal = false;
         alert('Category created successfully');
         this.loadCategories();
@@ -99,24 +99,24 @@ export class AdminCategories implements OnInit {
   updateCategory() {
     if (this.selectedCategory) {
       const updateData = {
-        id: parseInt(this.selectedCategory.id),
+        id: this.selectedCategory.id,
         name: this.selectedCategory.name,
         description: this.selectedCategory.description,
         isActive: this.selectedCategory.isActive
       };
 
-      this.adminService.updateCategory(parseInt(this.selectedCategory.id), updateData).subscribe({
+      this.adminService.updateCategory(this.selectedCategory.id, updateData).subscribe({
         next: (updated: any) => {
           const index = this.categories.findIndex(c => c.id === this.selectedCategory?.id);
           if (index !== -1) {
             this.categories[index] = {
-              id: updated.id.toString(),
+              id: updated.id as number,
               name: updated.name,
               description: updated.description || '',
               isActive: updated.isActive,
-              productsCount: this.categories[index].productsCount,
+              coursesCount: this.categories[index].coursesCount,
               createdAt: updated.createdAt || this.categories[index].createdAt
-            };
+            } as ICategory;
           }
           this.showEditModal = false;
           alert('Category updated successfully');
@@ -136,7 +136,7 @@ export class AdminCategories implements OnInit {
 
   deleteCategory() {
     if (this.selectedCategory) {
-      this.adminService.deleteCategory(parseInt(this.selectedCategory.id)).subscribe({
+      this.adminService.deleteCategory(this.selectedCategory.id).subscribe({
         next: () => {
           this.categories = this.categories.filter(c => c.id !== this.selectedCategory?.id);
           this.showDeleteModal = false;

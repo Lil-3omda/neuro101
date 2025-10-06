@@ -33,9 +33,15 @@ import {
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Normalize API base URL: prefer absolute backend, fallback to localhost:7011
+    this.apiUrl = (typeof environment.apiUrl === 'string' && environment.apiUrl.startsWith('http'))
+      ? environment.apiUrl
+      : 'http://localhost:7011/api';
+    console.log('[AdminService] apiUrl =', this.apiUrl);
+  }
 
   // ==================== DASHBOARD & ANALYTICS ====================
 

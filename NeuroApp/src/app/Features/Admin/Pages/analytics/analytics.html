@@ -22,7 +22,7 @@
             <h3>{{ analytics.totalUsers | number }}</h3>
             <p class="text-muted mb-0">Total Students</p>
             <small class="text-success">
-              <i class="fas fa-arrow-up"></i> {{ analytics.activeUsers }} active
+              <i class="fas fa-arrow-up"></i> {{ analytics.activeStudents }} active
             </small>
           </div>
         </div>
@@ -34,7 +34,7 @@
             <i class="fas fa-graduation-cap"></i>
           </div>
           <div class="stats-content">
-            <h3>{{ analytics.totalProducts | number }}</h3>
+            <h3>{{ analytics.totalCourses | number }}</h3>
             <p class="text-muted mb-0">Total Courses</p>
             <small class="text-info">
               <i class="fas fa-book"></i> Active courses
@@ -49,7 +49,7 @@
             <i class="fas fa-user-check"></i>
           </div>
           <div class="stats-content">
-            <h3>{{ analytics.totalOrders | number }}</h3>
+            <h3>{{ analytics.totalEnrollments | number }}</h3>
             <p class="text-muted mb-0">Total Enrollments</p>
             <small class="text-success">
               <i class="fas fa-chart-line"></i> Growing
@@ -90,15 +90,15 @@
           <div class="chart-body">
             <div class="bar-chart">
               <div class="chart-bars">
-                <div class="bar-item" *ngFor="let month of analytics.salesByMonth">
+                <div class="bar-item" *ngFor="let month of analytics.enrollmentsByMonth">
                   <div class="bar-wrapper">
-                    <div class="bar-fill" 
-                         [style.height.%]="getSalesPercentage(month.sales)"
-                         [title]="'$' + month.sales">
+                    <div class="bar-fill"
+                         [style.height.%]="getEnrollmentPercentage(month.enrollments)"
+                         [title]="month.enrollments">
                     </div>
                   </div>
                   <div class="bar-label">{{ month.month }}</div>
-                  <div class="bar-value">{{ month.sales }}</div>
+                  <div class="bar-value">{{ month.enrollments }}</div>
                 </div>
               </div>
             </div>
@@ -110,22 +110,22 @@
       <div class="col-lg-4 mb-4">
         <div class="chart-card">
           <div class="chart-header">
-            <h5><i class="fas fa-users me-2"></i>Users by Role</h5>
+            <h5><i class="fas fa-tags me-2"></i>Courses by Category</h5>
           </div>
           <div class="chart-body">
             <div class="role-distribution">
-              <div class="role-item" *ngFor="let role of analytics.usersByRole">
+              <div class="role-item" *ngFor="let cat of analytics.coursesByCategory; let i = index">
                 <div class="role-info">
-                  <span class="role-name">{{ role.role }}</span>
-                  <span class="role-count">{{ role.count }}</span>
+                  <span class="role-name">{{ cat.categoryName }}</span>
+                  <span class="role-count">{{ cat.coursesCount }}</span>
                 </div>
                 <div class="progress mb-2">
-                  <div class="progress-bar" 
-                       [style.width.%]="getUserRolePercentage(role.count)"
-                       [style.background-color]="getRoleColor(role.role)">
+                  <div class="progress-bar"
+                       [style.width.%]="getCategoryPercentage(cat.coursesCount)"
+                       [style.background-color]="getCategoryColor(i)">
                   </div>
                 </div>
-                <small class="text-muted">{{ getUserRolePercentage(role.count) | number:'1.1-1' }}%</small>
+                <small class="text-muted">{{ getCategoryPercentage(cat.coursesCount) | number:'1.1-1' }}%</small>
               </div>
             </div>
           </div>

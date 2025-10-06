@@ -46,6 +46,15 @@ export class AdminDashboard implements OnInit {
       },
       error: (error) => {
         console.error('Error loading dashboard stats:', error);
+        // fallback minimal stats to keep UI working
+        this.stats = {
+          totalCourses: 0,
+          totalEnrollments: 0,
+          totalInstructors: 0,
+          activeStudents: 0,
+          pendingInstructors: 0,
+          totalCategories: 0
+        };
         this.loading = false;
       }
     });
