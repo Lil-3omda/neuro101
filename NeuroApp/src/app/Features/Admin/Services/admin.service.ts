@@ -30,7 +30,6 @@ export class AdminService {
   private apiUrl: string;
 
   constructor(private http: HttpClient) {
-    // Normalize API base URL: prefer absolute backend, fallback to localhost:7011
     this.apiUrl = (typeof environment.apiUrl === 'string' && environment.apiUrl.startsWith('http'))
       ? environment.apiUrl
       : 'http://localhost:5075/api';
@@ -229,7 +228,7 @@ export class AdminService {
     formData.append('Title', title);
     formData.append('ModuleId', moduleId.toString());
     formData.append('VideoArrangement', videoOrder.toString());
-    
+
     return this.http.post<IVideo>(`${this.apiUrl}/Video/upload`, formData);
   }
 

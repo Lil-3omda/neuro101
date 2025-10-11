@@ -114,45 +114,52 @@ export class AdminCourses implements OnInit {
     this.showEditModal = true;
   }
 
-  updateCourse() {
-    if (this.selectedCourse) {
-      this.adminService.updateCourse(this.selectedCourse.id, this.selectedCourse).subscribe({
-        next: () => {
-          const index = this.courses.findIndex(c => c.id === this.selectedCourse?.id);
-          if (index !== -1) {
-            this.courses[index] = { ...this.selectedCourse };
-          }
-          this.showEditModal = false;
-          this.showSuccessMessage('Course updated successfully');
-        },
-        error: (error) => {
-          console.error('Error updating course:', error);
-          this.showErrorMessage('Failed to update course');
+ updateCourse() {
+  if (this.selectedCourse?.id != null) { // ensures id is not undefined or null
+    this.adminService.updateCourse(this.selectedCourse.id, this.selectedCourse).subscribe({
+      next: () => {
+        const index = this.courses.findIndex(c => c.id === this.selectedCourse?.id);
+        if (index !== -1) {
+          this.courses[index] = { ...this.selectedCourse! }; // non-null assertion
         }
-      });
-    }
+        this.showEditModal = false;
+        this.showSuccessMessage('Course updated successfully');
+      },
+      error: (error) => {
+        console.error('Error updating course:', error);
+        this.showErrorMessage('Failed to update course');
+      }
+    });
+  } else {
+    this.showErrorMessage('Invalid course ID for update.');
   }
+}
+
+deleteCourse() {
+  if (this.selectedCourse?.id != null) {
+    this.adminService.deleteCourse(this.selectedCourse.id).subscribe({
+      next: () => {
+        this.courses = this.courses.filter(c => c.id !== this.selectedCourse?.id);
+        this.showDeleteModal = false;
+        this.showSuccessMessage('Course deleted successfully');
+      },
+      error: (error) => {
+        console.error('Error deleting course:', error);
+        this.showErrorMessage('Failed to delete course');
+      }
+    });
+  } else {
+    this.showErrorMessage('Invalid course ID for delete.');
+  }
+}
+
 
   confirmDelete(course: ICourse) {
     this.selectedCourse = course;
     this.showDeleteModal = true;
   }
 
-  deleteCourse() {
-    if (this.selectedCourse) {
-      this.adminService.deleteCourse(this.selectedCourse.id).subscribe({
-        next: () => {
-          this.courses = this.courses.filter(c => c.id !== this.selectedCourse?.id);
-          this.showDeleteModal = false;
-          this.showSuccessMessage('Course deleted successfully');
-        },
-        error: (error) => {
-          console.error('Error deleting course:', error);
-          this.showErrorMessage('Failed to delete course');
-        }
-      });
-    }
-  }
+
 
   getFilteredCourses() {
     if (!this.searchTerm) {

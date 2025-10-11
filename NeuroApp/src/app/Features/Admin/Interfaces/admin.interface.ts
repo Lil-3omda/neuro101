@@ -9,7 +9,7 @@ export interface IStudent {
 
 // Course Interfaces
 export interface ICourse {
-  id: number;
+  id?: number;
   title: string;
   description: string;
   thumbnailUrl?: string;
@@ -35,7 +35,7 @@ export interface ICourseCreate {
 }
 
 export interface ICourseUpdate {
-  id: number;
+  id?: number;
   title?: string;
   description?: string;
   thumbnailUrl?: string;
