@@ -57,8 +57,21 @@ namespace Platform.Controllers
         public async Task<IActionResult> AddModule(AddModuleDTO module)
         {
 
-            await  moduleService.AddModule(module);
-            return Ok(new {message="Module Added Successfully"});
+            try
+            {
+                await moduleService.AddModule(module);
+                return Ok(new { Message = "Module created successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                // send a 400 BadRequest with the error message
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // generic error handler
+                return StatusCode(500, new { Message = "An error occurred", Details = ex.Message });
+            }
 
         }
 
@@ -86,5 +99,12 @@ namespace Platform.Controllers
             return Ok(new { message = "Module Deleted Successfully" });
         }
 
+        //Get Modules By Course ID
+        [HttpGet("GetModulesByCrsID/{crsId}")]
+        public async Task<IActionResult> GetModulesByCrsID(int crsId)
+        {
+            IEnumerable<ModulesDTO> modules = await moduleService.GetModulesByCrsID(crsId);
+            return Ok(modules);
+        }
     }
 }

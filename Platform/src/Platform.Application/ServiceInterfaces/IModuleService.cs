@@ -16,6 +16,7 @@ namespace Platform.Application.ServiceInterfaces
         Task AddModule(AddModuleDTO addModuleDTO);
         Task UpdateModule(AddModuleDTO addModuleDTO);
         Task DeleteModule(int id);
-       
+        Task<IEnumerable<ModulesDTO>> GetModulesByCrsID(int crsId);
+
     }
 }

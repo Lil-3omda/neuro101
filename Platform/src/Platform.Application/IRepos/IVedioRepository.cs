@@ -10,5 +10,6 @@ namespace Platform.Application.IRepos
 {
     public interface IVedioRepository:IGenericRepository<Video>
     {
+        public Task<IEnumerable<Video>> GetVideosWithCourse();
     }
 }

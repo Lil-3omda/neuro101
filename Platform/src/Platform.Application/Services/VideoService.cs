@@ -49,9 +49,22 @@ namespace Platform.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Video>> GetAllVideosAsync()
+        public async Task<IEnumerable<VideoGetAllDto>> GetAllVideosAsync()
         {
-            return await _unitOfWork.vedioRepository.GetAllAsync();
+            var videos = await _unitOfWork.vedioRepository.GetVideosWithCourse();
+
+            return videos.Select(v => new VideoGetAllDto
+            {
+                Id = v.Id,
+                Title = v.Title,
+                FilePath = v.FilePath,
+                Duration = v.Duration,
+                VideoArrangement = v.VideoArrangement,
+                ModuleId = v.ModuleId,
+                CourseId = v.Module?.Course?.Id ?? 0,
+                CourseName = v.Module?.Course?.Title ?? ""
+            });
+
         }
 
         public async Task<Video?> GetVideoByIdAsync(int id)

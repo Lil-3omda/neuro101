@@ -8,9 +8,7 @@ import { IAddCourse } from '../../interfaces/Course/iadd-course';
   providedIn: 'root'
 })
 export class CourseService {
-  /**
-   *
-   */
+
   constructor(private http: HttpClient) { }
 
   baseUrl: string = 'http://localhost:5075/api/Course';
@@ -21,8 +19,23 @@ export class CourseService {
   }
 
 
-
-  AddCourse(course : IAddCourse) {
-    this.http.post(this.baseUrl, course);
+  AddCourse(course : IAddCourse) : any  {
+     return  this.http.post(this.baseUrl, course);
   }
+
+
+  ViewCourseDetails(id:number):Observable<IAllCourses[]> {
+    return this.http.get<IAllCourses[]>(`${this.baseUrl}/${id}`);
+  }
+
+  EditCourse(id:number , EditCourse :IAddCourse ):Observable<IAddCourse> {
+    return this.http.put<IAddCourse>(`${this.baseUrl}/${id}`, EditCourse);
+  }
+
+
+  GetCourseById(id: number):Observable<IAllCourses> {
+  return  this.http.get<IAllCourses>(`${this.baseUrl}/${id}`)
+  }
+
+
 }

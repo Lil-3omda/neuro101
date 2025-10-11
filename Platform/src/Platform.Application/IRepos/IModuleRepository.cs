@@ -10,6 +10,7 @@ namespace Platform.Application.IRepos
 {
     public interface IModuleRepository : IGenericRepository<Platform.Core.Models.Module>
     {
+        Task<IEnumerable<Platform.Core.Models.Module>> GetAllModulesByCrsId(int crsId);
 
     }
 }

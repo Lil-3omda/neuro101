@@ -31,6 +31,18 @@ namespace Platform.Infrastructure.Repositories
 
         }
 
+        public Task<IEnumerable<Core.Models.Module>> GetAllModulesByCrsId(int crsId)
+        {
+
+            var modules = dbContext.Modules
+                .Where(m => m.CourseId == crsId)
+                .Include(m => m.Videos)
+                .Include(m => m.Course)
+                .AsNoTracking()
+                .ToListAsync();
+            return Task.FromResult((IEnumerable<Core.Models.Module>)modules.Result);
+        }
+
         public new async Task<Platform.Core.Models.Module?> GetByIdAsync(int id)
         {
             IEnumerable<Platform.Core.Models.Module> allModules = await GetAllAsync();

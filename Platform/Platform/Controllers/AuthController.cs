@@ -58,6 +58,8 @@ namespace Platform.Api.Controllers
                 return BadRequest(result.Errors);
             }
 
+            await _userManager.AddToRoleAsync(user, "Student");
+
             // Create Student entry
             var student = new Student
             {
@@ -117,14 +119,19 @@ namespace Platform.Api.Controllers
             return Ok(dto);
         }
 
-        private string GenerateJwtToken(AppUser user)
+        private async Task<string> GenerateJwtToken(AppUser user)
         {
-            var claims = new[]
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            // Add role claims
+            claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -139,6 +146,8 @@ namespace Platform.Api.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
 
         [HttpGet("check-email")]
         public async Task<IActionResult> CheckEmail([FromQuery] string email)
@@ -172,7 +181,7 @@ namespace Platform.Api.Controllers
             if (!isValid) return BadRequest("Invalid or expired OTP");
 
             // ✅ Generate JWT token after successful OTP verification
-            var token = GenerateJwtToken(user);
+            var token = await GenerateJwtToken(user); 
 
             return Ok(new
             {
@@ -180,5 +189,6 @@ namespace Platform.Api.Controllers
                 token
             });
         }
+
     }
 }

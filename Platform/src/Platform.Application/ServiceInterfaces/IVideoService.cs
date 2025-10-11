@@ -11,7 +11,7 @@ namespace Platform.Application.ServiceInterfaces
 {
     public interface IVideoService
     {
-        Task<IEnumerable<Video>> GetAllVideosAsync();
+        Task<IEnumerable<VideoGetAllDto>> GetAllVideosAsync();
         Task<Video?> GetVideoByIdAsync(int id);
         Task AddVideoAsync(IFormFile file, string title, int moduleId,int videoarrang);
         Task UpdateVideoAsync(VideoUpdateDto dto);
