@@ -258,7 +258,7 @@ namespace Platform.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Platform.Core.Models.Courses", b =>
@@ -302,7 +302,7 @@ namespace Platform.Infrastructure.Data.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("Platform.Core.Models.Enrollment", b =>
@@ -341,7 +341,7 @@ namespace Platform.Infrastructure.Data.Migrations
 
                     b.HasIndex("StdId");
 
-                    b.ToTable("Enrollments");
+                    b.ToTable("Enrollments", (string)null);
                 });
 
             modelBuilder.Entity("Platform.Core.Models.Instructor", b =>
@@ -371,7 +371,7 @@ namespace Platform.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Instructors");
+                    b.ToTable("Instructors", (string)null);
                 });
 
             modelBuilder.Entity("Platform.Core.Models.Module", b =>
@@ -396,7 +396,7 @@ namespace Platform.Infrastructure.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Modules", (string)null);
                 });
 
             modelBuilder.Entity("Platform.Core.Models.Student", b =>
@@ -421,7 +421,7 @@ namespace Platform.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Platform.Core.Models.Video", b =>
@@ -453,7 +453,7 @@ namespace Platform.Infrastructure.Data.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Videos");
+                    b.ToTable("Videos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

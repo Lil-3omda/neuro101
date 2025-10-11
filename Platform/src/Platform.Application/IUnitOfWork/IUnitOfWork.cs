@@ -15,6 +15,8 @@ namespace Platform.Core.Interfaces.IUnitOfWork
         public IVedioRepository vedioRepository { get; }
         public IEnrollmentRepository enrollmentRepository { get; }
         public IModuleRepository moduleRepository { get; }
+        public ICourseRepository courseRepository { get; }
+        public IInstructorRepository instructorRepository { get; }
 
         Task<int> SaveChangesAsync();
         Task<int> SaveChangesAsync(CancellationToken token);

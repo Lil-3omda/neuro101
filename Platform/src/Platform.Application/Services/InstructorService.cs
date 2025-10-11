@@ -60,7 +60,7 @@ namespace Platform.Application.Services
         // ------------------- Get All Instructors -------------------
         public async Task<IEnumerable<InstructorDto>> GetAllInstructorsAsync()
         {
-            var instructors = await _unitOfWork.Repository<Instructor>().GetAllAsync();
+            var instructors = await _unitOfWork.instructorRepository.GetAllAsync();
             return instructors.Select(i => new InstructorDto
             {
                 Id = i.Id,

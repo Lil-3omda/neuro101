@@ -1,6 +1,8 @@
 import { Route, Routes } from '@angular/router';
 import { Homecontainer } from './Features/Home/homecontainer/homecontainer/homecontainer';
 import { SimpleLayout } from './Shared/layouts/simple-Layout/simple-layout/simple-layout';
+import { EditCourse } from './Features/Instructor/Components/edit-course/edit-course';
+import { ViewCourse } from './Features/Instructor/Components/view-course/view-course';
 
 export const routes: Routes = [
   // 🔹 Admin area as default (for testing)
@@ -21,7 +23,7 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('./Features/Auth/auth.routes').then((m) => m.authRoutes),
+      import('./../app/Features/auth/auth.routes').then((m) => m.authRoutes),
   },
 
   // 🔹 Instructor area
@@ -44,11 +46,17 @@ export const routes: Routes = [
     // data: { roles: ['admin'] }
   },
 
+  { path: 'editCourse/:id', component: EditCourse, pathMatch: 'full' },
+  { path: 'ViewCourse', component: ViewCourse, pathMatch: 'full' },
+
+
   // 🔹 Wildcard fallback
   {
     path: '**',
     redirectTo: 'admin/dashboard'
   }
+
+
 ];
 
 

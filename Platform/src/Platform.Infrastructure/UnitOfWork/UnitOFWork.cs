@@ -26,11 +26,16 @@ namespace Platform.Infrastructure.UnitOfWork
             _context = context;
         }
 
+
         public IVedioRepository vedioRepository => new VideoRepository(_context);
 
         public IEnrollmentRepository enrollmentRepository => new EnrollmentRepository(_context);
         public ICategoryRepository categoryRepository => new CategoryRepository(_context);
         public IModuleRepository moduleRepository => new ModuleRepository(_context);
+
+        public ICourseRepository courseRepository => new CourseRepository(_context);
+
+        public IInstructorRepository instructorRepository => new InstructorRepository(_context);
 
         public void Dispose()
         {
