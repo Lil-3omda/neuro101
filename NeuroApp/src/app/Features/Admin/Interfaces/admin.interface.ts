@@ -1,31 +1,10 @@
-// User Interfaces
-export interface IUser {
+// Student Interfaces (handled through Auth system)
+export interface IStudent {
   id: string;
   name: string;
   email: string;
-  role: 'Student' | 'Instructor' | 'Admin';
-  status: 'Active' | 'Inactive' | 'Suspended';
-  createdAt: Date;
-  lastLogin?: Date;
-  phone?: string;
-  avatar?: string;
-}
-
-export interface IUserCreate {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  phone?: string;
-}
-
-export interface IUserUpdate {
-  id: string;
-  name?: string;
-  email?: string;
-  role?: string;
-  status?: string;
-  phone?: string;
+  enrolledCourses?: number;
+  joinDate?: Date;
 }
 
 // Course Interfaces
@@ -184,7 +163,7 @@ export interface ICategoryUpdate {
 
 // Analytics Interfaces
 export interface IAnalytics {
-  totalUsers: number;
+  totalStudents: number;
   totalCourses: number;
   totalEnrollments: number;
   totalInstructors: number;
@@ -209,7 +188,7 @@ export interface ICategoryData {
 }
 
 export interface IDashboardStats {
-  totalUsers: number;
+  totalStudents: number;
   totalCourses: number;
   totalEnrollments: number;
   totalInstructors: number;
